@@ -1,0 +1,32 @@
+version: 2
+
+sources:
+  - name: landing
+    description: Primary source system for order management system (OMS) data analytics
+    database: database
+    schema: public
+
+    # apparently freshness feature is not supported for sqlite adapter
+    config:
+      freshness:
+        warn_after: {count: 12, period: hour}
+        error_after: {count: 24, period: hour}
+      loaded_at_field: updated_at
+    
+    tables:
+      - name: customers
+        description: Customer table from OMS
+        identifier: customers
+        loaded_at_field: updated_at
+      - name: orders
+        description: Order table from OMS
+        identifier: orders
+        loaded_at_field: updated_at
+      - name: orderitems
+        description: OrderItems table from OMS
+        identifier: orderitems
+        loaded_at_field: updated_at
+      - name: employees
+        description: Employees table from OMS
+        identifier: employees
+        loaded_at_field: updated_at

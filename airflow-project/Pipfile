@@ -6,6 +6,8 @@ name = "pypi"
 [packages]
 apache-airflow = {extras = ["docker"], version = "==3.0.2"}
 pendulum = "*"
+pydantic = "*"
+pydantic-settings = "*"
 
 [dev-packages]
 

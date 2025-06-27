@@ -1,0 +1,22 @@
+version: 2
+
+sources:
+  - name: sales
+    description: Primary source system for sales data analytics
+    database: database
+    schema: public
+
+    config:
+      freshness:
+        warn_after: {count: 12, period: hour}
+        error_after: {count: 24, period: hour}
+    
+    tables:
+      - name: sales_uk
+        description: Sales table for uk records
+        identifier: sales_uk
+        loaded_at_field: updated_at
+      - name: sales_ph
+        description: Sales table for ph records
+        identifier: sales_ph
+        loaded_at_field: updated_at

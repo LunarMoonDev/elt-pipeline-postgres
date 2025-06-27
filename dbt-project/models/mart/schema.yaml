@@ -1,0 +1,24 @@
+models:
+  - name: mart_customer_revenue
+    description: Final mart table for customer data, with additional transformations and aggregations
+    columns:
+      - name: CustomerId
+        description: Unique identifier for each customer
+        tests:
+          - not_null
+          - unique
+          - relationships:
+              to: ref('stg_customers')
+              field: CustomerId
+      - name: CustomerName
+        description: Full name of the customer, concatenated from first and last names
+        tests:
+          - not_null
+      - name: OrderCount
+        description: Total number of orders placed by the customer
+        tests:
+          - not_null
+      - name: Revenue
+        description: Total revenue generated from the customer
+        tests:
+          - not_null

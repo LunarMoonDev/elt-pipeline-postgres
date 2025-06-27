@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  postgres:
+    container_name: elt_db
+    image: postgres
+    environment:
+      - POSTGRES_USER=sample
+      - POSTGRES_PASSWORD=example
+      - POSTGRES_DB=database
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./.data/database:/var/lib/postgresql/data
+      - ./scripts/create-database.sh:/docker-entrypoint-initdb.d/create-database.sh
+    networks:
+      - proj-tier
+
+
+networks:
+  proj-tier:
+    name: proj-tier
+    external: false

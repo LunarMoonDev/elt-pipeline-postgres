@@ -1,0 +1,130 @@
+models:
+  - name: stg_customers
+    description: Staged customer data from order management system (OMS), with minor level transformation
+    columns:
+      - name: CustomerId
+        description: unique identifier for each customer
+        tests:
+          - not_null
+          - unique
+      - name: FirstName
+        description: Customer's first name
+        tests:
+          - string_not_empty
+          - not_null
+      - name: LastName
+        description: Customer's last name
+        tests:
+          - string_not_empty
+          - not_null
+      - name: Email
+        description: Customer's privacte email for promotions and offers
+        tests:
+          - string_not_empty
+          - not_null
+      - name: Phone
+        description: Customer's phone number
+        tests:
+          - string_not_empty
+          - not_null
+      - name: Address
+        description: Customer's address
+        tests:
+          - string_not_empty
+          - not_null
+      - name: City
+        description: Customer's city
+        tests:
+          - string_not_empty
+          - not_null
+      - name: State
+        description: Customer's state
+        tests:
+          - string_not_empty
+          - not_null
+      - name: ZipCode
+        description: Customer's postal code
+        tests:
+          - string_not_empty
+          - not_null
+      - name: Updated_at
+        description: Timestamp when the customer record was last updated
+        tests:
+          - not_null
+      - name: CustomerName
+        description: Full name of the customer, concatenated from first and last names
+        tests:
+          - not_null
+  
+  - name: stg_orders
+    description: Staged order data from order management system (OMS), with minor level transformation
+    columns:
+      - name: OrderId
+        description: Unique identifier for each order
+        tests:
+          - not_null
+          - unique
+      - name: CustomerId
+        description: Unique identifier for the customer who placed the order
+        tests:
+          - not_null
+      - name: OrderDate
+        description: Date when the order was placed
+        tests:
+          - not_null
+      - name: EmployeeId
+        description: Unique identifier for the employee who processed the order
+        tests:
+          - not_null
+      - name: StoreId
+        description: Unique identifier for the store where the order was placed
+        tests:
+          - not_null
+      - name: StatusCD
+        description: "{{ doc('StatusCD') }}"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['01', '02', '03']
+      - name: StatusDesc
+        description: Description of the order status (e.g., "In Progress", "Completed", "Cancelled")
+        tests:
+          - not_null
+      - name: Updated_at
+        description: Timestamp when the order record was last updated
+        tests:
+          - not_null
+  
+  - name: stg_orderitems
+    description: Staged order item data from order management system (OMS), with minor level transformation
+    columns:
+      - name: OrderItemId
+        description: Unique identifier for each order item
+        tests:
+          - not_null
+          - unique
+      - name: OrderId
+        description: Unique identifier for the order to which this item belongs
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_orders')
+              field: OrderID
+      - name: ProductId
+        description: Unique identifier for the product in the order item
+        tests:
+          - not_null
+      - name: Quantity
+        description: Quantity of the product ordered
+        tests:
+          - not_null
+      - name: TotalPrice
+        description: Total price for the order item (calculated as Quantity * Price)
+        tests:
+          - not_null
+      - name: Updated_at
+        description: Timestamp when the order item record was last updated
+        tests:
+          - not_null
+
+      

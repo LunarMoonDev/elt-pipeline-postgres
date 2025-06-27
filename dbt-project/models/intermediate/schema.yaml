@@ -1,0 +1,82 @@
+models:
+  - name: int_orders_fact
+    description: Intermediate fact table for orders, with additional transformations and aggregations
+    columns:
+      - name: OrderId
+        description: Unique identifier for each order
+        tests:
+          - not_null
+          - unique
+      - name: OrderDate
+        description: Date when the order was placed
+        tests:
+          - not_null
+      - name: CustomerId
+        description: Unique identifier for the customer who placed the order
+        tests:
+          - not_null
+      - name: EmployeeId
+        description: Unique identifier for the employee who processed the order
+        tests:
+          - not_null
+      - name: StoreId
+        description: Unique identifier for the store where the order was placed
+        tests:
+          - not_null
+      - name: StatusCD
+        description: "{{ doc('StatusCD') }}"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['01', '02', '03']
+      - name: StatusDesc
+        description: Description of the order status (e.g., "In Progress", "Completed")
+        tests:
+          - not_null
+      - name: OrderCount
+        description: Total number of items in the order
+        tests:
+          - not_null
+      - name: Revenue
+        description: Total revenue generated from the order
+        tests:
+          - not_null
+      - name: Updated_at
+        description: Timestamp when the order record was last updated
+        tests:
+          - not_null
+  
+  - name: int_order_items_uniq
+    description: Intermediate table for unique order items, with additional transformations and aggregations
+    tests:
+      - dbt_expectations.expect_table_row_count_to_equal_other_table:
+          compare_model: ref('stg_orderitems')
+    columns:
+      - name: OrderItemId
+        description: Unique identifier for each order item
+        tests:
+          - not_null
+          - unique
+      - name: OrderId
+        description: Unique identifier for the order to which this item belongs
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_orders')
+              field: OrderID
+      - name: ProductId
+        description: Unique identifier for the product in the order item
+        tests:
+          - not_null
+      - name: Quantity
+        description: Quantity of the product ordered
+        tests:
+          - not_null
+      - name: TotalPrice
+        description: Total price for the order item (calculated as Quantity * Price)
+        tests:
+          - not_null
+      - name: Updated_at
+        description: Timestamp when the order item record was last updated
+        tests:
+          - not_null
